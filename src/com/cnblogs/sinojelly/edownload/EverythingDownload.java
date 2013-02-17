@@ -22,10 +22,10 @@ import org.htmlparser.util.NodeList;
  *   edownload [-v -o local] url
  * 
  * Options:
- *   -v : verbose infomation.   (support since version 1.1)
- *   -o local : specify local file path. (default current directory.)  (support since version 1.1)
+ *   -v : verbose infomation.   (support since version 1.2)
+ *   -o local : specify local file path. (default current directory.)  (support since version 1.2)
  * 
- * @version 1.0
+ * @version 1.1
  * 
  * @author Jelly
  *
@@ -38,24 +38,30 @@ public class EverythingDownload {
      */
     public static void main(String[] args) {
         
+        final String URL_SEPARATOR = "/?s=";
+        
         if (args.length <= 0 || args[0].equals("--help")) { // without parameter
-            System.out.println("edownload version: 1.0");
+            System.out.println("edownload version: 1.1");
+            System.out.println("");
             System.out.println("Usage:");
             System.out.println("  edownload url");
+            System.out.println("");
+            System.out.println("url: should include \""+URL_SEPARATOR+"\", and ends with the file's full name which is searched.");
+            System.out.println("");
+            System.out.println("eg: edownload http://localhost/?s=bin2txt.bat");
             return;
         }
         
-        String inputUrl = args[0]; //"http://localhost/?s=bin2txt.bat";
+        String inputUrl = args[0]; //"http://localhost/?s=bin2txt.bat";        
         
-        String separateStr = "/?s=";
-        int separateIndex = inputUrl.indexOf(separateStr);
+        int separateIndex = inputUrl.indexOf(URL_SEPARATOR);
         
         if (separateIndex < 0) {
-            System.err.println("Error: Input URL invalid, should include \"" + separateStr + "\"");
+            System.err.println("Error: Input URL invalid, should include \"" + URL_SEPARATOR + "\"");
         }
         
         String baseUrl = inputUrl.substring(0, separateIndex);
-        String fileName = inputUrl.substring(separateIndex + separateStr.length());
+        String fileName = inputUrl.substring(separateIndex + URL_SEPARATOR.length());
         
         System.out.println("Base URL : " + baseUrl);
         System.out.println("File Name: " + fileName);
@@ -83,7 +89,7 @@ public class EverythingDownload {
                     Node textnode = (Node) nodes.elementAt(i);
                     String href = ((TagNode)textnode).getAttribute("href");
                     filePath = baseUrl+href;
-                    if (filePath.endsWith(fileName)) {
+                    if (filePath.endsWith("/" + fileName)) {
                         break;
                     }
                 }
