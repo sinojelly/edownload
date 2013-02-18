@@ -69,7 +69,7 @@ public class EverythingDownload {
         String filePath = null;
         
         try{
-            Parser parser = new Parser( (HttpURLConnection) (new URL(inputUrl)).openConnection() );
+            Parser parser = new Parser( (HttpURLConnection) (new URL(inputUrl)).openConnection() ); // TODO: treat with open connection timeout.
 
             NodeFilter withTagA = new TagNameFilter ("a");
             NodeFilter withAttributeClass = new HasAttributeFilter("class");
